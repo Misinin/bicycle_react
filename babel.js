@@ -34,21 +34,12 @@ function getRandomLetterSequence(string) {
 }
 
 function getListItem(item) {
-  return (
-    <li>
-      <div>{item}</div>
-    </li>
-  );
+  return <li>{item}</li>;
 }
 
 const list = (
   <ul>{getRandomLetterSequence(POSSIBLE_LETTERS).map(getListItem)}</ul>
 );
-
-function listInTags(markupList) {
-  const list = { ...markupList };
-  return list;
-}
 
 let rootInstance = null;
 
@@ -136,13 +127,27 @@ function updateDomProperties(elementContainer, prevProps, nextProps) {
   const prevPropsKeys = Object.keys(prevProps).filter(
     (key) => key !== "children"
   );
-  prevPropsKeys.forEach((key) => (elementContainer[key] = null));
+
+  // prevPropsKeys.forEach((key) => (elementContainer[key] = null));
 
   const nextPropsKeys = Object.keys(nextProps).filter(
     (key) => key !== "children"
   );
 
-  nextPropsKeys.forEach((key) => (elementContainer[key] = nextProps[key]));
+  // nextPropsKeys.forEach((key) => (elementContainer[key] = nextProps[key]));
+
+  prevPropsKeys.forEach((prevKey) =>
+    nextPropsKeys.forEach((nextKey) => {
+      // console.log(elementContainer[prevKey], nextProps[nextKey]);
+
+      if (elementContainer[prevKey] === nextProps[nextKey]) {
+        console.log("return", elementContainer[prevKey]);
+        return;
+      }
+      console.log(elementContainer[prevKey]);
+      elementContainer[prevKey] = nextProps[nextKey];
+    })
+  );
 }
 
 render(list, root);
@@ -155,4 +160,4 @@ function resortList() {
   render(letters, root);
 }
 
-button.addEventListener("click", resortList);
+setInterval(resortList, 5000)
